@@ -56,3 +56,29 @@ class Odcinek:
                 return self.początek.x <= odcinek2.koniec.x and odcinek2.początek.x <= self.koniec.x
         else:
             return False
+
+
+class Wielokąt:
+    def __init__(self, *wierzchołki: Punkt):
+        if len(wierzchołki) < 3:
+            raise ValueError(f"Wielokąt musi mieć conajmniej 3 wierzchołki, a podano {len(wierzchołki)}")
+        self.wierzchołki = wierzchołki
+
+    def czy_wypukły(self):
+        kierunek = 0
+        for index in range(len(self.wierzchołki)):
+            bok = (self.wierzchołki[index], self.wierzchołki[(index+1)%len(self.wierzchołki)])
+            nast_wierzchołek = self.wierzchołki[(index+2)%len(self.wierzchołki)]
+            prosta_boku = Odcinek(*bok).prosta
+            if prosta_boku.b != 0:
+                nowy_kierunek = (bok[1].x - bok[0].x) * (nast_wierzchołek.y - (-prosta_boku.a*nast_wierzchołek.x-prosta_boku.c)/prosta_boku.b)
+            else:
+                nowy_kierunek = (bok[1].y - bok[0].y) * ((-prosta_boku.c/prosta_boku.a)-nast_wierzchołek.x)
+            if nowy_kierunek == 0:
+                continue
+            nowy_kierunek //= abs(nowy_kierunek)
+            if kierunek == 0:
+                kierunek = nowy_kierunek
+            elif kierunek != nowy_kierunek:
+                return False
+        return True
