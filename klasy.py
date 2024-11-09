@@ -22,7 +22,7 @@ class Prosta:
 
     def punk_przecięcia(self, prosta2: Prosta) -> Punkt | bool:
         W = (self.a*prosta2.b)-(prosta2.a*self.b)
-        Wx = (-self.c-prosta2.b)-(-prosta2.c*self.b)
+        Wx = -(self.c*prosta2.b)+(prosta2.c*self.b)
         Wy = -(self.a*prosta2.c)+(self.a*prosta2.c)
 
         if W == 0:
