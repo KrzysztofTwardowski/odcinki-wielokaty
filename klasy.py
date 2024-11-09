@@ -4,6 +4,25 @@ class Punkt:
     def __init__(self, x: float, y: float):
         self.x = x
         self.y = y
+    
+    def czy_należy_do(self, wielokąt: Wielokąt):
+        if not wielokąt.czy_wypukły():
+            raise ValueError("Wielokąt musi być wypukły")
+        for indeks in range(len(wielokąt.wierzchołki)):
+            bok = (wielokąt.wierzchołki[indeks], wielokąt.wierzchołki[(indeks+1)%len(wielokąt.wierzchołki)])
+            inny_wierzchołek = wielokąt.wierzchołki[(indeks+2)%len(wielokąt.wierzchołki)]
+            prosta_boku = Odcinek(*bok).prosta
+            if prosta_boku.b != 0:
+                położenie_wierzchołka = (bok[1].x - bok[0].x) * (inny_wierzchołek.y - (-prosta_boku.a*inny_wierzchołek.x-prosta_boku.c)/prosta_boku.b)
+                położenie_punktu = (bok[1].x - bok[0].x) * (self.y - (-prosta_boku.a*self.x-prosta_boku.c)/prosta_boku.b)
+            else:
+                położenie_wierzchołka = (bok[1].y - bok[0].y) * ((-prosta_boku.c/prosta_boku.a) - inny_wierzchołek.x)
+                położenie_punktu = (bok[1].y - bok[0].y) * ((-prosta_boku.c/prosta_boku.a) - inny_wierzchołek.x)
+            if inny_wierzchołek == 0:
+                continue
+            elif położenie_punktu * położenie_wierzchołka < 0:
+                return False
+        return True
 
 
 class Prosta:
@@ -66,9 +85,9 @@ class Wielokąt:
 
     def czy_wypukły(self):
         kierunek = 0
-        for index in range(len(self.wierzchołki)):
-            bok = (self.wierzchołki[index], self.wierzchołki[(index+1)%len(self.wierzchołki)])
-            nast_wierzchołek = self.wierzchołki[(index+2)%len(self.wierzchołki)]
+        for indeks in range(len(self.wierzchołki)):
+            bok = (self.wierzchołki[indeks], self.wierzchołki[(indeks+1)%len(self.wierzchołki)])
+            nast_wierzchołek = self.wierzchołki[(indeks+2)%len(self.wierzchołki)]
             prosta_boku = Odcinek(*bok).prosta
             if prosta_boku.b != 0:
                 nowy_kierunek = (bok[1].x - bok[0].x) * (nast_wierzchołek.y - (-prosta_boku.a*nast_wierzchołek.x-prosta_boku.c)/prosta_boku.b)
