@@ -17,11 +17,11 @@ while True:
             exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if len(punkty) < 4:
-                punkty.append(Punkt(*pygame.mouse.get_pos()))
+                punkty.append(pygame.mouse.get_pos())
             if len(punkty) == 2:
                 odcinek1 = Odcinek(punkty[0], punkty[1])
             elif len(punkty) == 4:
-                print(*[(punkt.x, punkt.y) for punkt in punkty])
+                print(*[(punkt[0], punkt[1]) for punkt in punkty])
                 odcinek1 = Odcinek(punkty[0], punkty[1])
                 odcinek2 = Odcinek(punkty[2], punkty[3])
                 if odcinek1.przecina(odcinek2):
@@ -30,8 +30,8 @@ while True:
                     kolor = "#ff0000"
     okno.fill("#000000")
     if isinstance(odcinek1, Odcinek):
-        pygame.draw.line(okno, kolor, (odcinek1.początek.x, odcinek1.początek.y), (odcinek1.koniec.x, odcinek1.koniec.y))
+        pygame.draw.line(okno, kolor, (odcinek1.początek[0], odcinek1.początek[1]), (odcinek1.koniec[0], odcinek1.koniec[1]))
     if isinstance(odcinek2, Odcinek):
-        pygame.draw.line(okno, kolor, (odcinek2.początek.x, odcinek2.początek.y), (odcinek2.koniec.x, odcinek2.koniec.y))
+        pygame.draw.line(okno, kolor, (odcinek2.początek[0], odcinek2.początek[1]), (odcinek2.koniec[0], odcinek2.koniec[1]))
     pygame.display.update()
     zegar.tick(60)

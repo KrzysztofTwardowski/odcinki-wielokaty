@@ -24,7 +24,7 @@ while True:
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             print(punkty_wielokąta)
             if wielokąt is None:
-                wielokąt = klasy.Wielokąt(*[klasy.Punkt(x, y) for x, y in punkty_wielokąta])
+                wielokąt = klasy.Wielokąt(*punkty_wielokąta)
                 if wielokąt.wypukły:
                     kolor = "#00ff00"
                 else:
@@ -37,7 +37,7 @@ while True:
     
     while wielokąt and len(punkty) > 0:
         punkt = punkty.pop()
-        if klasy.Punkt(*punkt).należy_do_wielokąta(wielokąt):
+        if wielokąt.czy_zawiera_punkt(punkt):
             kolor_punktu = "#00ff00"
         else:
             kolor_punktu = "#ff0000"
