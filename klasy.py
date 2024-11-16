@@ -5,7 +5,10 @@ class Punkt:
         self.x = x
         self.y = y
     
-    def czy_należy_do(self, wielokąt: Wielokąt):
+    def __eq__(self, value: object) -> bool:
+        return isinstance(value, Punkt) and (value.x, value.y) == (self.x, self.y)
+
+    def należy_do_wielokąta(self, wielokąt: Wielokąt) -> bool:
         if not wielokąt.czy_wypukły():
             raise ValueError("Wielokąt musi być wypukły")
         ilość_boków = len(wielokąt.wierzchołki)
@@ -89,7 +92,7 @@ class Wielokąt:
             raise ValueError(f"Wielokąt musi mieć conajmniej 3 wierzchołki, a podano {len(wierzchołki)}")
         self.wierzchołki = wierzchołki
 
-    def czy_wypukły(self):
+    def czy_wypukły(self) -> bool:
         kierunek = 0
         for indeks in range(len(self.wierzchołki)):
             bok = (self.wierzchołki[indeks], self.wierzchołki[(indeks+1)%len(self.wierzchołki)])
