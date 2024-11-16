@@ -9,26 +9,26 @@ class Punkt:
         return isinstance(value, Punkt) and (value.x, value.y) == (self.x, self.y)
 
     def należy_do_wielokąta(self, wielokąt: Wielokąt) -> bool:
-        if not wielokąt.czy_wypukły():
+        if not wielokąt.wypukły():
             raise ValueError("Wielokąt musi być wypukły")
-        ilość_boków = len(wielokąt.wierzchołki)
-        for indeks in range(ilość_boków):
-            punkt0 = wielokąt.wierzchołki[indeks]
-            punkt1 = wielokąt.wierzchołki[(indeks+1)%ilość_boków]
-            punkt2 = wielokąt.wierzchołki[(indeks+2)%ilość_boków]
-            prosta = Odcinek(punkt0, punkt1).prosta
+        for indeks in range(wielokąt.ilość_boków):
+            prosta = Odcinek(
+                wielokąt.wierzchołki[indeks],
+                wielokąt.wierzchołki[(indeks+1)%wielokąt.ilość_boków]
+            ).prosta
+            nast_punkt = wielokąt.wierzchołki[(indeks+2)%wielokąt.ilość_boków]
             if prosta.b == 0:
                 x_prostej = -prosta.c / prosta.a
-                if (x_prostej - punkt2.x) == 0:
+                if (x_prostej - nast_punkt.x) == 0:
                     continue
-                elif (x_prostej - punkt2.x) * (x_prostej - self.x) >= 0:
+                elif (x_prostej - nast_punkt.x) * (x_prostej - self.x) >= 0:
                     continue
                 else:
                     return False
             else:
-                if (prosta.a*punkt2.x + prosta.b*punkt2.y + prosta.c) == 0:
+                if (prosta.a*nast_punkt.x + prosta.b*nast_punkt.y + prosta.c) == 0:
                     continue
-                elif (prosta.a*self.x + prosta.b*self.y + prosta.c) * (prosta.a*punkt2.x + prosta.b*punkt2.y + prosta.c) >= 0:
+                elif (prosta.a*self.x + prosta.b*self.y + prosta.c) * (prosta.a*nast_punkt.x + prosta.b*nast_punkt.y + prosta.c) >= 0:
                     continue
                 else:
                     return False
@@ -91,22 +91,25 @@ class Wielokąt:
         if len(wierzchołki) < 3:
             raise ValueError(f"Wielokąt musi mieć conajmniej 3 wierzchołki, a podano {len(wierzchołki)}")
         self.wierzchołki = wierzchołki
-
-    def czy_wypukły(self) -> bool:
+        self.ilość_boków = len(self.wierzchołki)
+    
+    def wypukły(self) -> bool:
         kierunek = 0
-        for indeks in range(len(self.wierzchołki)):
-            bok = (self.wierzchołki[indeks], self.wierzchołki[(indeks+1)%len(self.wierzchołki)])
-            nast_wierzchołek = self.wierzchołki[(indeks+2)%len(self.wierzchołki)]
-            prosta_boku = Odcinek(*bok).prosta
-            if prosta_boku.b != 0:
-                nowy_kierunek = (bok[1].x - bok[0].x) * (nast_wierzchołek.y - (-prosta_boku.a*nast_wierzchołek.x-prosta_boku.c)/prosta_boku.b)
+        for indeks in range(self.ilość_boków):
+            bok = (
+                self.wierzchołki[indeks],
+                self.wierzchołki[(indeks+1)%self.ilość_boków]
+            )
+            prosta = Odcinek(*bok).prosta
+            nast_punkt = self.wierzchołki[(indeks+2)%self.ilość_boków]
+            if prosta.b == 0:
+                nowy_kierunek = (bok[1].y - bok[0].y) * ((-prosta.c/prosta.a)-nast_punkt.x)
             else:
-                nowy_kierunek = (bok[1].y - bok[0].y) * ((-prosta_boku.c/prosta_boku.a)-nast_wierzchołek.x)
+                nowy_kierunek = (bok[1].x - bok[0].x) * (nast_punkt.y - (-prosta.a*nast_punkt.x-prosta.c)/prosta.b)
             if nowy_kierunek == 0:
                 continue
-            nowy_kierunek //= abs(nowy_kierunek)
-            if kierunek == 0:
+            elif kierunek == 0:
                 kierunek = nowy_kierunek
-            elif kierunek != nowy_kierunek:
+            elif kierunek * nowy_kierunek < 0:
                 return False
         return True
