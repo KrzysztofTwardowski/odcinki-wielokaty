@@ -8,12 +8,6 @@ punkty = []
 kolor = "#ffffff"
 odcinek1 = None
 odcinek2 = None
-# odcinek1 = Odcinek(Punkt(100, 100), Punkt(200, 100))
-# odcinek2 = Odcinek(Punkt(202, 100), Punkt(250, 100))
-# if odcinek1.przecina(odcinek2):
-#     kolor = "#00ff00"
-# else:
-#     kolor = "#ff0000"
 zegar = pygame.time.Clock()
 
 while True:
@@ -27,6 +21,7 @@ while True:
             if len(punkty) == 2:
                 odcinek1 = Odcinek(punkty[0], punkty[1])
             elif len(punkty) == 4:
+                print(*[(punkt.x, punkt.y) for punkt in punkty])
                 odcinek1 = Odcinek(punkty[0], punkty[1])
                 odcinek2 = Odcinek(punkty[2], punkty[3])
                 if odcinek1.przecina(odcinek2):
@@ -39,4 +34,4 @@ while True:
     if isinstance(odcinek2, Odcinek):
         pygame.draw.line(okno, kolor, (odcinek2.początek.x, odcinek2.początek.y), (odcinek2.koniec.x, odcinek2.koniec.y))
     pygame.display.update()
-    zegar.tick(30)
+    zegar.tick(60)

@@ -9,7 +9,7 @@ class Punkt:
         return isinstance(value, Punkt) and (value.x, value.y) == (self.x, self.y)
 
     def należy_do_wielokąta(self, wielokąt: Wielokąt) -> bool:
-        if not wielokąt.wypukły():
+        if not wielokąt.wypukły:
             raise ValueError("Wielokąt musi być wypukły")
         for indeks in range(wielokąt.ilość_boków):
             prosta = Odcinek(
@@ -92,8 +92,9 @@ class Wielokąt:
             raise ValueError(f"Wielokąt musi mieć conajmniej 3 wierzchołki, a podano {len(wierzchołki)}")
         self.wierzchołki = wierzchołki
         self.ilość_boków = len(self.wierzchołki)
+        self.wypukły = self.czy_wypukły()
     
-    def wypukły(self) -> bool:
+    def czy_wypukły(self) -> bool:
         kierunek = 0
         for indeks in range(self.ilość_boków):
             bok = (
