@@ -8,22 +8,28 @@ class Punkt:
     def czy_należy_do(self, wielokąt: Wielokąt):
         if not wielokąt.czy_wypukły():
             raise ValueError("Wielokąt musi być wypukły")
-        for indeks in range(len(wielokąt.wierzchołki)):
-            bok = (wielokąt.wierzchołki[indeks], wielokąt.wierzchołki[(indeks+1)%len(wielokąt.wierzchołki)])
-            inny_wierzchołek = wielokąt.wierzchołki[(indeks+2)%len(wielokąt.wierzchołki)]
-            prosta_boku = Odcinek(*bok).prosta
-            if prosta_boku.b != 0:
-                położenie_wierzchołka = (bok[1].x - bok[0].x) * (inny_wierzchołek.y - (-prosta_boku.a*inny_wierzchołek.x-prosta_boku.c)/prosta_boku.b)
-                położenie_punktu = (bok[1].x - bok[0].x) * (self.y - (-prosta_boku.a*self.x-prosta_boku.c)/prosta_boku.b)
+        ilość_boków = len(wielokąt.wierzchołki)
+        for indeks in range(ilość_boków):
+            punkt0 = wielokąt.wierzchołki[indeks]
+            punkt1 = wielokąt.wierzchołki[(indeks+1)%ilość_boków]
+            punkt2 = wielokąt.wierzchołki[(indeks+2)%ilość_boków]
+            prosta = Odcinek(punkt0, punkt1).prosta
+            if prosta.b == 0:
+                x_prostej = -prosta.c / prosta.a
+                if (x_prostej - punkt2.x) == 0:
+                    continue
+                elif (x_prostej - punkt2.x) * (x_prostej - self.x) >= 0:
+                    continue
+                else:
+                    return False
             else:
-                położenie_wierzchołka = (bok[1].y - bok[0].y) * ((-prosta_boku.c/prosta_boku.a) - inny_wierzchołek.x)
-                położenie_punktu = (bok[1].y - bok[0].y) * ((-prosta_boku.c/prosta_boku.a) - inny_wierzchołek.x)
-            if inny_wierzchołek == 0:
-                continue
-            elif położenie_punktu * położenie_wierzchołka < 0:
-                return False
+                if (prosta.a*punkt2.x + prosta.b*punkt2.y + prosta.c) == 0:
+                    continue
+                elif (prosta.a*self.x + prosta.b*self.y + prosta.c) * (prosta.a*punkt2.x + prosta.b*punkt2.y + prosta.c) >= 0:
+                    continue
+                else:
+                    return False
         return True
-
 
 class Prosta:
     def __init__(self, a: float, b: float, c: float):
