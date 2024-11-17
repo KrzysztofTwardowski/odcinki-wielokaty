@@ -22,13 +22,18 @@ class Prosta:
         
         return (Wx/W, Wy/W)
 ```
-Parametry `self.a`, `self.b` i `self.c` są współczynnikami równania prostej w postaci ogólnej: 
+Zmienne `self.a`, `self.b` i `self.c` są współczynnikami równania prostej w postaci ogólnej: 
 $$ax + by + c = 0$$
-Metoda `punkt_przecięcia` zwraca rozwiązanie układu równań danych prostych. Jeżeli proste są równoległe, metoda zwraca `True` lub `False` w zależności od tego, czy proste mają punkty wspólne.
+Metoda `punkt_przecięcia` zwraca punkt przecięcia danych prostych. Jeżeli proste są równoległe, metoda zwraca `True` lub `False` w zależności od tego, czy proste mają punkty wspólne.
 
 ## 2. Badanie przecinania się odcinków
 ### Konstruktor klasy `Odcinek`
-Konstruktor klasy `Odcinek` sprawdza, czy podane punkty się od siebie różnią. Następnie zmienia on kolejność podanych punktów, żeby $x$ punktu `początek` był mniejszy niż $x$ punktu `koniec`. w przypadku, gdy wartości współrzędnej $x$ obu punktów są równe kolejność tych punktów jest zmieniana tak, żeby $y$ punktu `początek` był mniejszy niż y punktu `koniec`. Taka kolejność punktów jest potrzebna przy sprawdzaniu, czy punkt przecięcia prostych należy do odcinka.
+
+Konstruktor klasy `Odcinek` sprawdza, czy podane punkty się od siebie różnią. Następnie zmienia on kolejność podanych punktów tak, żeby $x_1<x_2$, lub $y_1<y_2$ w przypadku, gdy $x_1=x_2$. Taka kolejność punktów będzie potrzebna przy sprawdzaniu, czy punkt przecięcia prostych należy do odcinka.  
+ 
+$x_1$ i $y_1$ to współrzędne punktu `self.początek`, a $x_2$ i $y_2$ to współrzędne punktu `self.koniec` 
+
+
 
 ```python
 class Odcinek:
@@ -64,7 +69,6 @@ Metoda `prosta` znajduje prostą do której należy odcinek
 Równanie prostej wyznaczane jest poprzez podstawienie współrzędnych skrajnych punktów odcinka do równania prostej:  
 $$ax_1 + by_1 + c = 0$$  
 $$ax_2 + by_2 + c = 0$$  
-Gdzie $x_1$, $y_1$, $x_2$, $y_2$ to kolejno: `self.początek[0]`, `self.początek[1]`, `self.koniec[0]`, `self.koniec[1]`.  
 Po przekształceniu układu równań otrzymujemy:  
 $$a = y_1 - y_2$$  
 $$b = x_2 - x_1$$  
