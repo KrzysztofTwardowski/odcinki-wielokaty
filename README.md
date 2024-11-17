@@ -72,6 +72,7 @@ $$c = -ax_1 -by_1$$
 ### Metoda `przecina`
 
 ```python
+    def przecina(self, odcinek2: Odcinek) -> bool:
         punkt_przecięcia = self.prosta.punk_przecięcia(odcinek2.prosta)
         if isinstance(punkt_przecięcia, tuple):
             return all((
