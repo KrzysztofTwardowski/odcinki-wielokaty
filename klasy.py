@@ -33,11 +33,18 @@ class Odcinek:
             self.początek = początek
             self.koniec = koniec
 
+        self._prosta = None
+    
+    @property
+    def prosta(self):
+        if self._prosta is not None:
+            return self._prosta
         a = self.początek[1] - self.koniec[1]
         b = self.koniec[0] - self.początek[0]
         c = -(a*self.początek[0] + b*self.początek[1])
-        self.prosta = Prosta(a, b, c)
-    
+        self._prosta = Prosta(a, b, c)
+        return self._prosta
+
     def przecina(self, odcinek2: Odcinek) -> bool:
         punkt_przecięcia = self.prosta.punk_przecięcia(odcinek2.prosta)
         if isinstance(punkt_przecięcia, tuple):
@@ -58,11 +65,14 @@ class Wielokąt:
     def __init__(self, *wierzchołki: Punkt):
         if len(wierzchołki) < 3:
             raise ValueError(f"Wielokąt musi mieć conajmniej 3 wierzchołki, a podano {len(wierzchołki)}")
-        self.wierzchołki = wierzchołki
+        self.wierzchołki = list(wierzchołki)
         self.ilość_boków = len(self.wierzchołki)
-        self.wypukły = self.czy_wypukły()
+        self._wypukły = None
     
-    def czy_wypukły(self) -> bool:
+    @property
+    def wypukły(self):
+        if self._wypukły is not None:
+            return self._wypukły
         kierunek = 0
         for indeks in range(self.ilość_boków):
             bok = (
@@ -80,8 +90,10 @@ class Wielokąt:
             elif kierunek == 0:
                 kierunek = nowy_kierunek
             elif kierunek * nowy_kierunek < 0:
-                return False
-        return True
+                self._wypukły = False
+                return self._wypukły
+        self._wypukły = True
+        return self._wypukły
 
     def czy_zawiera_punkt(self, punkt: Punkt) -> bool:
         if not self.wypukły:

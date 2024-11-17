@@ -1,14 +1,19 @@
 import pygame, klasy
+from main import generuj_wielokąt_foremny
 pygame.init()
 
 okno = pygame.display.set_mode((1440, 900))
 zegar = pygame.time.Clock()
 
-punkty_wielokąta = []
 punkty = []
-
+punkty_wielokąta = []
 kolor = "#ffffff"
+
 wielokąt = None
+stworzono_wielokąt = False
+
+wielokąt = generuj_wielokąt_foremny(25, (720, 450), 400)
+stworzono_wielokąt = True
 
 while True:
     for event in pygame.event.get():
@@ -25,12 +30,14 @@ while True:
             print(punkty_wielokąta)
             if wielokąt is None:
                 wielokąt = klasy.Wielokąt(*punkty_wielokąta)
-                if wielokąt.wypukły:
-                    kolor = "#00ff00"
-                else:
-                    kolor = "#ff0000"
-                punkty_wielokąta.append(punkty_wielokąta[0])
+                stworzono_wielokąt = True
     
+    if stworzono_wielokąt:
+        if wielokąt.wypukły:
+            kolor = "#00ff00"
+        else:
+            kolor = "#ff0000"
+        punkty_wielokąta = wielokąt.wierzchołki + [wielokąt.wierzchołki[0]]
 
     for indeks in range(len(punkty_wielokąta)-1):
         pygame.draw.line(okno, kolor, punkty_wielokąta[indeks], punkty_wielokąta[indeks+1])
