@@ -26,7 +26,10 @@ class Odcinek:
         if początek == koniec:
             raise ValueError("punkty muszą się od siebie różnić")
         
-        if (początek[0] > koniec[0]) or (początek[0] == koniec[0] and początek[1] > koniec[1]):
+        if any((
+                początek[0] > koniec[0],
+                początek[0] == koniec[0] and początek[1] > koniec[1]
+            )):
             self.początek = koniec
             self.koniec = początek
         else:
@@ -54,9 +57,14 @@ class Odcinek:
             ))
         elif punkt_przecięcia:
             if self.prosta.b == 0:
-                return self.początek[1] <= odcinek2.koniec[1] and odcinek2.początek[1] <= self.koniec[1]
+                return all((
+                    self.początek[1] <= odcinek2.koniec[1],
+                    odcinek2.początek[1] <= self.koniec[1]
+                ))
             else:
-                return self.początek[0] <= odcinek2.koniec[0] and odcinek2.początek[0] <= self.koniec[0]
+                return all((self.początek[0] <= odcinek2.koniec[0],
+                            odcinek2.początek[0] <= self.koniec[0]
+                ))
         else:
             return False
 
@@ -64,7 +72,7 @@ class Odcinek:
 class Wielokąt:
     def __init__(self, *wierzchołki: Punkt):
         if len(wierzchołki) < 3:
-            raise ValueError(f"Wielokąt musi mieć conajmniej 3 wierzchołki, a podano {len(wierzchołki)}")
+            raise ValueError(f"Wielokąt musi mieć conajmniej 3 wierzchołki")
         self.wierzchołki = list(wierzchołki)
         self.ilość_boków = len(self.wierzchołki)
         self._wypukły = None
@@ -82,9 +90,11 @@ class Wielokąt:
             prosta = Odcinek(*bok).prosta
             nast_punkt = self.wierzchołki[(indeks+2)%self.ilość_boków]
             if prosta.b == 0:
-                nowy_kierunek = (bok[1][1] - bok[0][1]) * ((-prosta.c/prosta.a)-nast_punkt[0])
+                nowy_kierunek = (bok[1][1] - bok[0][1]) *\
+                                ((-prosta.c/prosta.a)-nast_punkt[0])
             else:
-                nowy_kierunek = (bok[1][0] - bok[0][0]) * (nast_punkt[1] - (-prosta.a*nast_punkt[0]-prosta.c)/prosta.b)
+                nowy_kierunek = (bok[1][0] - bok[0][0]) *\
+                                (nast_punkt[1] + (prosta.a*nast_punkt[0]+prosta.c)/prosta.b)
             if nowy_kierunek == 0:
                 continue
             elif kierunek == 0:
@@ -115,7 +125,8 @@ class Wielokąt:
             else:
                 if (prosta.a*nast_punkt[0] + prosta.b*nast_punkt[1] + prosta.c) == 0:
                     continue
-                elif (prosta.a*punkt[0] + prosta.b*punkt[1] + prosta.c) * (prosta.a*nast_punkt[0] + prosta.b*nast_punkt[1] + prosta.c) >= 0:
+                elif (prosta.a*punkt[0] + prosta.b*punkt[1] + prosta.c) *\
+                     (prosta.a*nast_punkt[0] + prosta.b*nast_punkt[1] + prosta.c) >= 0:
                     continue
                 else:
                     return False

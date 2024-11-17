@@ -36,7 +36,10 @@ class Odcinek:
         if początek == koniec:
             raise ValueError("punkty muszą się od siebie różnić")
         
-        if (początek[0] > koniec[0]) or (początek[0] == koniec[0] and początek[1] > koniec[1]):
+        if any((
+                początek[0] > koniec[0],
+                początek[0] == koniec[0] and początek[1] > koniec[1]
+            )):
             self.początek = koniec
             self.koniec = początek
         else:
@@ -45,8 +48,8 @@ class Odcinek:
 
         self._prosta = None
 ```
-### Właściwość `prosta`
-Właściwość `prosta` znajduje prostą do której należy odcinek
+### Metoda `prosta`
+Metoda `prosta` znajduje prostą do której należy odcinek
 ```python
     @property
     def prosta(self):
@@ -69,7 +72,6 @@ $$c = -ax_1 -by_1$$
 ### Metoda `przecina`
 
 ```python
-    def przecina(self, odcinek2: Odcinek) -> bool:
         punkt_przecięcia = self.prosta.punk_przecięcia(odcinek2.prosta)
         if isinstance(punkt_przecięcia, tuple):
             return all((
@@ -78,9 +80,14 @@ $$c = -ax_1 -by_1$$
             ))
         elif punkt_przecięcia:
             if self.prosta.b == 0:
-                return self.początek[1] <= odcinek2.koniec[1] and odcinek2.początek[1] <= self.koniec[1]
+                return all((
+                    self.początek[1] <= odcinek2.koniec[1],
+                    odcinek2.początek[1] <= self.koniec[1]
+                ))
             else:
-                return self.początek[0] <= odcinek2.koniec[0] and odcinek2.początek[0] <= self.koniec[0]
+                return all((self.początek[0] <= odcinek2.koniec[0],
+                            odcinek2.początek[0] <= self.koniec[0]
+                ))
         else:
             return False
 ```
