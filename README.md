@@ -96,3 +96,65 @@ $$c = -ax_1 -by_1$$
         else:
             return False
 ```
+
+## 2. Badanie przynależności punktu do wielokątów wypukłych
+### Sprawdzanie czy wielokąt jest wypukły
+```python
+    @property
+    def wypukły(self):
+        if self._wypukły is not None:
+            return self._wypukły
+        kierunek = 0
+        for indeks in range(self.ilość_boków):
+            bok = (
+                self.wierzchołki[indeks],
+                self.wierzchołki[(indeks+1)%self.ilość_boków]
+            )
+            prosta = Odcinek(*bok).prosta
+            nast_punkt = self.wierzchołki[(indeks+2)%self.ilość_boków]
+            if prosta.b == 0:
+                nowy_kierunek = (bok[1][1] - bok[0][1]) *\
+                                ((-prosta.c/prosta.a)-nast_punkt[0])
+            else:
+                nowy_kierunek = (bok[1][0] - bok[0][0]) *\
+                                (nast_punkt[1] + (prosta.a*nast_punkt[0]+prosta.c)/prosta.b)
+            if nowy_kierunek == 0:
+                continue
+            elif kierunek == 0:
+                kierunek = nowy_kierunek
+            elif kierunek * nowy_kierunek < 0:
+                self._wypukły = False
+                return self._wypukły
+        self._wypukły = True
+        return self._wypukły
+```
+### Sprawdzanie czy punkt należy do wielokąta wypukłego
+```python
+    def czy_zawiera_punkt(self, punkt: Punkt) -> bool:
+        if not self.wypukły:
+            raise ValueError("Wielokąt musi być wypukły")
+        for indeks in range(self.ilość_boków):
+            prosta = Odcinek(
+                self.wierzchołki[indeks],
+                self.wierzchołki[(indeks+1)%self.ilość_boków]
+            ).prosta
+            nast_punkt = self.wierzchołki[(indeks+2)%self.ilość_boków]
+            if prosta.b == 0:
+                x_prostej = -prosta.c / prosta.a
+                if (x_prostej - nast_punkt[0]) == 0:
+                    continue
+                elif (x_prostej - nast_punkt[0]) * (x_prostej - punkt[0]) >= 0:
+                    continue
+                else:
+                    return False
+            else:
+                if (prosta.a*nast_punkt[0] + prosta.b*nast_punkt[1] + prosta.c) == 0:
+                    continue
+                elif (prosta.a*punkt[0] + prosta.b*punkt[1] + prosta.c) *\
+                     (prosta.a*nast_punkt[0] + prosta.b*nast_punkt[1] + prosta.c) >= 0:
+                    continue
+                else:
+                    return False
+        return True
+
+```

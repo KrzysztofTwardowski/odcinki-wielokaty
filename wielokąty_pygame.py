@@ -1,5 +1,4 @@
 import pygame, klasy
-from main import generuj_wielokąt_foremny
 pygame.init()
 
 okno = pygame.display.set_mode((1440, 900))
@@ -12,7 +11,7 @@ kolor = "#ffffff"
 wielokąt = None
 stworzono_wielokąt = False
 
-wielokąt = generuj_wielokąt_foremny(25, (720, 450), 400)
+wielokąt = klasy.Wielokąt.generuj_foremny(25, (720, 450), 400)
 stworzono_wielokąt = True
 
 while True:

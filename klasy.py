@@ -1,4 +1,5 @@
 from __future__ import annotations
+from math import sin, cos, pi
 
 Punkt = tuple[float, float]
 
@@ -131,3 +132,15 @@ class Wielokąt:
                 else:
                     return False
         return True
+
+    @classmethod
+    def generuj_foremny(cls, ilość_boków: int, środek: Punkt, promień: float):
+        kąty = [2*pi/ilość_boków*i for i in range(ilość_boków)]
+        wierzchołki = []
+
+        for kąt in kąty:
+            x = promień * sin(kąt) + środek[0]
+            y = promień * cos(kąt) + środek[1]
+            wierzchołki.append((x, y))
+
+        return cls(*wierzchołki)

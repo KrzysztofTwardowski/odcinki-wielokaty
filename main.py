@@ -2,19 +2,8 @@ from math import sin, cos, pi
 from klasy import Wielokąt, Odcinek, Punkt
 from time import perf_counter_ns
 
-def generuj_wielokąt_foremny(ilość_boków: int, środek: Punkt, promień: float):
-    kąty = [2*pi/ilość_boków*i for i in range(ilość_boków)]
-    wierzchołki = []
-
-    for kąt in kąty:
-        x = promień * sin(kąt) + środek[0]
-        y = promień * cos(kąt) + środek[1]
-        wierzchołki.append((x, y))
-
-    return Wielokąt(*wierzchołki)
-
 if __name__ == "__main__":
-    wielokąt = generuj_wielokąt_foremny(
+    wielokąt = Wielokąt.generuj_foremny(
         ilość_boków=10_000,
         środek=(10, 10),
         promień=100
