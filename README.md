@@ -77,6 +77,7 @@ $$c = -ax_1 -by_1$$
 Metoda `przecina` zwraca `True`, gdy:  
   - Proste, do których należą odcinki, przecinają się w jednym punkcie oraz punkt przecięcia prostych należy do obu odcinków  
   - Oba odcinki leżą na tej samej prostej i mają punkty wspólne  
+
 Gdy żaden z powyższych warunków nie jest spełniony metoda zwraca `False`.  
 
 ```python
