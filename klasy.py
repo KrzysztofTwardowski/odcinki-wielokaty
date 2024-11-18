@@ -82,7 +82,7 @@ class Wielokąt:
     def wypukły(self):
         if self._wypukły is not None:
             return self._wypukły
-        kierunek = 0
+        strona = 0
         for indeks in range(self.ilość_boków):
             bok = (
                 self.wierzchołki[indeks],
@@ -91,16 +91,16 @@ class Wielokąt:
             prosta = Odcinek(*bok).prosta
             nast_punkt = self.wierzchołki[(indeks+2)%self.ilość_boków]
             if prosta.b == 0:
-                nowy_kierunek = (bok[1][1] - bok[0][1]) *\
+                nowa_strona = (bok[1][1] - bok[0][1]) *\
                                 ((-prosta.c/prosta.a)-nast_punkt[0])
             else:
-                nowy_kierunek = (bok[1][0] - bok[0][0]) *\
+                nowa_strona = (bok[1][0] - bok[0][0]) *\
                                 (nast_punkt[1] + (prosta.a*nast_punkt[0]+prosta.c)/prosta.b)
-            if nowy_kierunek == 0:
+            if nowa_strona == 0:
                 continue
-            elif kierunek == 0:
-                kierunek = nowy_kierunek
-            elif kierunek * nowy_kierunek < 0:
+            elif strona == 0:
+                strona = nowa_strona
+            elif strona * nowa_strona < 0:
                 self._wypukły = False
                 return self._wypukły
         self._wypukły = True

@@ -104,12 +104,13 @@ Gdy żaden z powyższych warunków nie jest spełniony metoda zwraca `False`.
 
 ## 2. Badanie przynależności punktu do wielokątów wypukłych
 ### Sprawdzanie czy wielokąt jest wypukły
+Wielokąt jest wypukły, gdy dla każdych trzech kolejnych wierzchołków, trzeci zawsze znajduje się po tej samej stronie od wektora wyznaczanego przez pierwsze dwa punkty.
 ```python
     @property
     def wypukły(self):
         if self._wypukły is not None:
             return self._wypukły
-        kierunek = 0
+        strona = 0
         for indeks in range(self.ilość_boków):
             bok = (
                 self.wierzchołki[indeks],
@@ -118,16 +119,16 @@ Gdy żaden z powyższych warunków nie jest spełniony metoda zwraca `False`.
             prosta = Odcinek(*bok).prosta
             nast_punkt = self.wierzchołki[(indeks+2)%self.ilość_boków]
             if prosta.b == 0:
-                nowy_kierunek = (bok[1][1] - bok[0][1]) *\
+                nowa_strona = (bok[1][1] - bok[0][1]) *\
                                 ((-prosta.c/prosta.a)-nast_punkt[0])
             else:
-                nowy_kierunek = (bok[1][0] - bok[0][0]) *\
+                nowa_strona = (bok[1][0] - bok[0][0]) *\
                                 (nast_punkt[1] + (prosta.a*nast_punkt[0]+prosta.c)/prosta.b)
-            if nowy_kierunek == 0:
+            if nowa_strona == 0:
                 continue
-            elif kierunek == 0:
-                kierunek = nowy_kierunek
-            elif kierunek * nowy_kierunek < 0:
+            elif strona == 0:
+                strona = nowa_strona
+            elif strona * nowa_strona < 0:
                 self._wypukły = False
                 return self._wypukły
         self._wypukły = True
@@ -161,7 +162,22 @@ Gdy żaden z powyższych warunków nie jest spełniony metoda zwraca `False`.
                 else:
                     return False
         return True
+```
 
+### Generowanie wielokątów foremnych
+Metoda `generuj_foremny` generuje wielokąt foremny wpisany w okrąg o promieniu `promień` i o środku w punkcie `środek`
+```python
+    @classmethod
+    def generuj_foremny(cls, ilość_boków: int, środek: Punkt, promień: float):
+        kąty = [2*pi/ilość_boków*i for i in range(ilość_boków)]
+        wierzchołki = []
+
+        for kąt in kąty:
+            x = promień * sin(kąt) + środek[0]
+            y = promień * cos(kąt) + środek[1]
+            wierzchołki.append((x, y))
+
+        return cls(*wierzchołki)
 ```
 
 ## Przykłady użycia
@@ -215,9 +231,9 @@ odcinek1 = None
 odcinek2 = None
 stworzono_odcinki = False
 
-odcinek1 = Odcinek((135, 126), (470, 417))
-odcinek2 = Odcinek((513, 213), (265, 364))
-stworzono_odcinki = True
+# odcinek1 = Odcinek((135, 126), (470, 417))
+# odcinek2 = Odcinek((513, 213), (265, 364))
+# stworzono_odcinki = True
 
 while True:
     for event in pygame.event.get():
@@ -266,8 +282,8 @@ kolor = "#ffffff"
 wielokąt = None
 stworzono_wielokąt = False
 
-wielokąt = klasy.Wielokąt.generuj_foremny(25, (720, 450), 400)
-stworzono_wielokąt = True
+# wielokąt = klasy.Wielokąt.generuj_foremny(25, (720, 450), 400)
+# stworzono_wielokąt = True
 
 while True:
     for event in pygame.event.get():

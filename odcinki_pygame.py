@@ -13,9 +13,9 @@ odcinek1 = None
 odcinek2 = None
 stworzono_odcinki = False
 
-odcinek1 = Odcinek((135, 126), (470, 417))
-odcinek2 = Odcinek((513, 213), (265, 364))
-stworzono_odcinki = True
+# odcinek1 = Odcinek((135, 126), (470, 417))
+# odcinek2 = Odcinek((513, 213), (265, 364))
+# stworzono_odcinki = True
 
 while True:
     for event in pygame.event.get():
