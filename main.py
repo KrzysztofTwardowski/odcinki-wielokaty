@@ -2,8 +2,8 @@ from klasy import Wielokąt, Odcinek
 
 if __name__ == "__main__":
     # sprawdzanie przecinania się odcinków
-    odcinek1 = Odcinek((-5, 0), (0, 10))
-    odcinek2 = Odcinek((-4, 10), (3, -1))
+    odcinek1 = Odcinek((0, 10), (100, 10))
+    odcinek2 = Odcinek((-10, 15), (10, 15))
     print(f"czy odcinki się przecinają: {odcinek1.przecina(odcinek2)}")
 
     # sprawdzanie przynależności punktu do wielokąta wypukłego

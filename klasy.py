@@ -13,14 +13,24 @@ class Prosta:
         self.b = b
         self.c = c
 
-    def punk_przecięcia(self, prosta2: Prosta) -> Punkt | bool:
+    def __eq__(self, prosta2):
+        if not isinstance(prosta2, Prosta):
+            return False
+        W = (self.a*prosta2.b)-(prosta2.a*self.b)
+        Wx = -(self.c*prosta2.b)+(prosta2.c*self.b)
+        Wy = -(self.a*prosta2.c)+(prosta2.a*self.c)
+        return W == 0 and Wx == 0 and Wy == 0
+
+    def czy_równoległa(self, prosta2: Prosta):
+        return (self.a*prosta2.b)-(prosta2.a*self.b) == 0
+
+    def punk_przecięcia(self, prosta2: Prosta) -> Punkt:
+        if self.czy_równoległa(prosta2):
+            raise ValueError("Proste są równoległe")
         W = (self.a*prosta2.b)-(prosta2.a*self.b)
         Wx = -(self.c*prosta2.b)+(prosta2.c*self.b)
         Wy = -(self.a*prosta2.c)+(prosta2.a*self.c)
 
-        if W == 0:
-            return (Wx, Wy) == (0, 0)
-        
         return (Wx/W, Wy/W)
                 
 
@@ -29,42 +39,34 @@ class Odcinek:
         if początek == koniec:
             raise ValueError("punkty muszą się od siebie różnić")
         
-        if any((
-                początek[0] > koniec[0],
-                początek[0] == koniec[0] and początek[1] > koniec[1]
-            )):
-            self.początek = koniec
-            self.koniec = początek
-        else:
-            self.początek = początek
-            self.koniec = koniec
+        self.początek = początek
+        self.koniec = koniec
 
-    
-    def prosta(self):
         a = self.początek[1] - self.koniec[1]
         b = self.koniec[0] - self.początek[0]
         c = -(a*self.początek[0] + b*self.początek[1])
-        return Prosta(a, b, c)
+        self.prosta = Prosta(a, b, c)
+
+    def czy_zawiera_punkt(self, punkt: Punkt):
+        return all((
+            abs(self.koniec[0] - self.początek[0]) >= abs(self.koniec[0] - punkt[0]),
+            abs(self.koniec[0] - self.początek[0]) >= abs(punkt[0] - self.początek[0]),
+            abs(self.koniec[1] - self.początek[1]) >= abs(self.koniec[1] - punkt[1]),
+            abs(self.koniec[1] - self.początek[1]) >= abs(punkt[1] - self.początek[1])
+        ))
 
     def przecina(self, odcinek2: Odcinek) -> bool:
-        punkt_przecięcia = self.prosta().punk_przecięcia(odcinek2.prosta())
-        if isinstance(punkt_przecięcia, tuple):
-            return all((
-                self.początek[0] <= punkt_przecięcia[0] <= self.koniec[0],
-                odcinek2.początek[0] <= punkt_przecięcia[0] <= odcinek2.koniec[0]
-            ))
-        elif punkt_przecięcia:
-            if self.prosta().b == 0:
-                return all((
-                    self.początek[1] <= odcinek2.koniec[1],
-                    odcinek2.początek[1] <= self.koniec[1]
-                ))
-            else:
-                return all((self.początek[0] <= odcinek2.koniec[0],
-                            odcinek2.początek[0] <= self.koniec[0]
-                ))
+        # Odcinki nie są równoległe
+        if not self.prosta.czy_równoległa(odcinek2.prosta):
+            punkt_przecięcia = self.prosta.punk_przecięcia(odcinek2.prosta)
+            return self.czy_zawiera_punkt(punkt_przecięcia) and odcinek2.czy_zawiera_punkt(punkt_przecięcia)
+        # Odcinki leżą na tej samej prostej
+        if self.prosta == odcinek2.prosta:
+            return self.czy_zawiera_punkt(odcinek2.początek) or self.czy_zawiera_punkt(odcinek2.koniec)
         else:
             return False
+
+
 
 
 class Wielokąt:
