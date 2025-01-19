@@ -11,7 +11,7 @@ kolor = "#ffffff"
 wielokąt = None
 stworzono_wielokąt = False
 
-# wielokąt = klasy.Wielokąt.generuj_foremny(25, (720, 450), 400)
+# wzielokąt = klasy.Wielokąt.generuj_foremny(25, (720, 450), 400)
 # stworzono_wielokąt = True
 
 while True:

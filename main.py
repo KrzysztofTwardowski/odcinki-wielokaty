@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     # sprawdzanie przynależności punktu do wielokąta wypukłego
     wielokąt = Wielokąt.generuj_foremny(
-        ilość_boków=10_000,
+        ilość_boków=50_000,
         środek=(10, 10),
         promień=100
     )
