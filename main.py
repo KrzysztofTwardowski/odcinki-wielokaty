@@ -89,13 +89,14 @@ class Wielokąt:
         return True
 
     def czy_zawiera_punkt(self, punkt: Punkt) -> bool:
+        if not self.czy_wypukły():
+            raise ValueError("Wielokąt musi być wypukły")
         kierunek = 0
         for indeks in range(len(self.wierzchołki)):
-            punkt1 = self.wierzchołki[indeks]
-            punkt2 = self.wierzchołki[(indeks+1)%len(self.wierzchołki)]
-            punkt3 = punkt
-            wektor1 = (punkt2[0]-punkt1[0], punkt2[1]-punkt1[1])
-            wektor2 = (punkt3[0]-punkt2[0], punkt3[1]-punkt2[1])
+            wierzchołek1 = self.wierzchołki[indeks]
+            wierzchołek2 = self.wierzchołki[(indeks+1)%len(self.wierzchołki)]
+            wektor1 = (wierzchołek2[0]-wierzchołek1[0], wierzchołek2[1]-wierzchołek1[1])
+            wektor2 = (punkt[0]-wierzchołek2[0], punkt[1]-wierzchołek2[1])
             iloczyn = iloczyn_wektorowy(wektor1, wektor2)
             if kierunek == 0:
                 kierunek = iloczyn
