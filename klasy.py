@@ -14,12 +14,12 @@ class Prosta:
         self.c = c
 
     def __eq__(self, prosta2):
-        if not isinstance(prosta2, Prosta):
-            return False
-        W = (self.a*prosta2.b)-(prosta2.a*self.b)
-        Wx = -(self.c*prosta2.b)+(prosta2.c*self.b)
-        Wy = -(self.a*prosta2.c)+(prosta2.a*self.c)
-        return W == 0 and Wx == 0 and Wy == 0
+        if isinstance(prosta2, Prosta):
+            W = (self.a*prosta2.b)-(prosta2.a*self.b)
+            Wx = -(self.c*prosta2.b)+(prosta2.c*self.b)
+            Wy = -(self.a*prosta2.c)+(prosta2.a*self.c)
+            return W == 0 and Wx == 0 and Wy == 0
+        return False
 
     def czy_równoległa(self, prosta2: Prosta):
         return (self.a*prosta2.b)-(prosta2.a*self.b) == 0
@@ -42,31 +42,27 @@ class Odcinek:
         self.początek = początek
         self.koniec = koniec
 
+        self.x_min = min(początek[0], koniec[0])
+        self.x_max = max(początek[0], koniec[0])
+        self.y_min = min(początek[1], koniec[1])
+        self.y_max = max(początek[1], koniec[1])
+
         a = self.początek[1] - self.koniec[1]
         b = self.koniec[0] - self.początek[0]
         c = -(a*self.początek[0] + b*self.początek[1])
         self.prosta = Prosta(a, b, c)
 
     def czy_zawiera_punkt(self, punkt: Punkt):
-        return all((
-            abs(self.koniec[0] - self.początek[0]) >= abs(self.koniec[0] - punkt[0]),
-            abs(self.koniec[0] - self.początek[0]) >= abs(punkt[0] - self.początek[0]),
-            abs(self.koniec[1] - self.początek[1]) >= abs(self.koniec[1] - punkt[1]),
-            abs(self.koniec[1] - self.początek[1]) >= abs(punkt[1] - self.początek[1])
-        ))
-
+        return self.x_min <= punkt[0] <= self.x_max and self.y_min <= punkt[1] <= self.y_max
+    
     def przecina(self, odcinek2: Odcinek) -> bool:
-        # Odcinki nie są równoległe
         if not self.prosta.czy_równoległa(odcinek2.prosta):
             punkt_przecięcia = self.prosta.punk_przecięcia(odcinek2.prosta)
             return self.czy_zawiera_punkt(punkt_przecięcia) and odcinek2.czy_zawiera_punkt(punkt_przecięcia)
-        # Odcinki leżą na tej samej prostej
         if self.prosta == odcinek2.prosta:
             return self.czy_zawiera_punkt(odcinek2.początek) or self.czy_zawiera_punkt(odcinek2.koniec)
         else:
             return False
-
-
 
 
 class Wielokąt:
