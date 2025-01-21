@@ -4,13 +4,13 @@
 
 ### Zasada działania
 
-1. Jeżeli odcinki leżą na różnych, przecinających się prostych:
-    - wyznaczenie punktu przecięcia tych prostych
-    - sprawdzenie, czy punkt przecięcia prostych należy do dwóch odcinków
-2. Jeżeli odcinki leżą na jednej prostej
-    - sprawdzenie, czy conajmniej jeden koniec jednego z odcinków należy do drugiego
-3. Jeżeli odcinki leżą na różnych, równoległych prostych
-    - odcinki się nie przecinają
+- Jeżeli odcinki leżą na różnych, przecinających się prostych:
+    - Wyznaczenie punktu przecięcia prostych.
+    - Sprawdzenie, czy punkt przecięcia należy do obu odcinków.
+- Jeżeli odcinki leżą na jednej prostej:
+    - Sprawdzenie, czy conajmniej jeden koniec jednego z odcinków należy do drugiego.
+- Jeżeli odcinki leżą na różnych, równoległych prostych:
+    - Odcinki się nie przecinają.
 
 ### Implementacja w pythonie
 
@@ -51,12 +51,7 @@
 
 ### Zasada działania
 
-1. Dla każdych dwóch kolejnych wierzchołków wielokąta:
-    - Utworzenie zmiennych `wektor1` i `wektor2`
-        - `wektor1` - wektor od pierwszego do drugiego wierzchołka
-        - `wektor2` - wektor od drugiego wierzchołka do badanego punktu
-    - Obliczenie wartości iloczynu tych wektorów
-    - Sprawdzenie, czy iloczyn jest tego samego znaku dla dowolnego boku
+Funkcja `czy_zawiera_punkt` sprawdza, czy punkt znajduje się wewnątrz wielokąta wypukłego. Dla każdego boku wielokąta obliczany jest iloczyn wektorowy, który pozwala określić, po której stronie boku znajduje się punkt. Jeżeli punkt jest po tej samej stronie dla wszystkich boków, znajduje się wewnątrz wielokąta.
 
 ### Implementacja w pythonie
 
@@ -78,6 +73,28 @@
                     return False
         return True
 ```
+
+#### Funkcja `czy_wypukły`
+
+```python
+    def czy_wypukły(self):
+        kierunek = 0
+        for indeks in range(len(self.wierzchołki)):
+            punkt1 = self.wierzchołki[indeks]
+            punkt2 = self.wierzchołki[(indeks+1)%len(self.wierzchołki)]
+            punkt3 = self.wierzchołki[(indeks+2)%len(self.wierzchołki)]
+            wektor1 = (punkt2[0]-punkt1[0], punkt2[1]-punkt1[1])
+            wektor2 = (punkt3[0]-punkt2[0], punkt3[1]-punkt2[1])
+            iloczyn = iloczyn_wektorowy(wektor1, wektor2)
+            if kierunek == 0:
+                kierunek = iloczyn
+            else:
+                if kierunek * iloczyn < 0:
+                    return False
+        return True
+```
+
+Funkcja `czy_wypukły` sprawdza, czy wielokąt jest wypukły. Dla każdej pary sąsiadujących boków wielokąta obliczany jest iloczyn wektorowy, który pozwala określić, po której stronie znajduje się mniejszy kąt. Jeśli dla wszystkich par boków wynik iloczynu wektorowego ma ten sam znak (mniejszy kąt znajduje się po tej samej stronie), wielokąt jest wypukły.
 
 #### Funkcja `iloczyn_wektorowy`
 
