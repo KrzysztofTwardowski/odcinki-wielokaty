@@ -22,7 +22,8 @@ class Prosta:
         return False
 
     def czy_równoległa(self, prosta2: Prosta):
-        return (self.a*prosta2.b)-(prosta2.a*self.b) == 0
+        W = (self.a*prosta2.b)-(prosta2.a*self.b)
+        return W == 0
 
     def punk_przecięcia(self, prosta2: Prosta) -> Punkt:
         if self.czy_równoległa(prosta2):
