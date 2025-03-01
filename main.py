@@ -71,27 +71,8 @@ class Wielokąt:
         if len(wierzchołki) < 3:
             raise ValueError(f"Wielokąt musi mieć conajmniej 3 wierzchołki")
         self.wierzchołki = list(wierzchołki)
-        self.wypukły = self.czy_wypukły()
-    
-    def czy_wypukły(self):
-        kierunek = 0
-        for indeks in range(len(self.wierzchołki)):
-            punkt1 = self.wierzchołki[indeks]
-            punkt2 = self.wierzchołki[(indeks+1)%len(self.wierzchołki)]
-            punkt3 = self.wierzchołki[(indeks+2)%len(self.wierzchołki)]
-            wektor1 = (punkt2[0]-punkt1[0], punkt2[1]-punkt1[1])
-            wektor2 = (punkt3[0]-punkt2[0], punkt3[1]-punkt2[1])
-            iloczyn = iloczyn_wektorowy(wektor1, wektor2)
-            if kierunek == 0:
-                kierunek = iloczyn
-            else:
-                if kierunek * iloczyn < 0:
-                    return False
-        return True
 
     def czy_zawiera_punkt(self, punkt: Punkt) -> bool:
-        if not self.czy_wypukły():
-            raise ValueError("Wielokąt musi być wypukły")
         kierunek = 0
         for indeks in range(len(self.wierzchołki)):
             wierzchołek1 = self.wierzchołki[indeks]

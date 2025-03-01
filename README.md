@@ -74,28 +74,6 @@ Funkcja `czy_zawiera_punkt` sprawdza, czy punkt znajduje się wewnątrz wieloką
         return True
 ```
 
-#### Funkcja `czy_wypukły`
-
-```python
-    def czy_wypukły(self):
-        kierunek = 0
-        for indeks in range(len(self.wierzchołki)):
-            punkt1 = self.wierzchołki[indeks]
-            punkt2 = self.wierzchołki[(indeks+1)%len(self.wierzchołki)]
-            punkt3 = self.wierzchołki[(indeks+2)%len(self.wierzchołki)]
-            wektor1 = (punkt2[0]-punkt1[0], punkt2[1]-punkt1[1])
-            wektor2 = (punkt3[0]-punkt2[0], punkt3[1]-punkt2[1])
-            iloczyn = iloczyn_wektorowy(wektor1, wektor2)
-            if kierunek == 0:
-                kierunek = iloczyn
-            else:
-                if kierunek * iloczyn < 0:
-                    return False
-        return True
-```
-
-Funkcja `czy_wypukły` sprawdza, czy wielokąt jest wypukły. Dla każdej pary sąsiadujących boków wielokąta obliczany jest iloczyn wektorowy, który pozwala określić, po której stronie znajduje się mniejszy kąt. Jeśli dla wszystkich par boków wynik iloczynu wektorowego ma ten sam znak (mniejszy kąt znajduje się po tej samej stronie), wielokąt jest wypukły.
-
 #### Funkcja `iloczyn_wektorowy`
 
 ```python
