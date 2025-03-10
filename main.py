@@ -2,8 +2,6 @@ from __future__ import annotations
 
 Punkt = tuple[float, float]
 
-def iloczyn_wektorowy(w1, w2):
-    return w1[0] * w2[1] - w1[1] * w2[0]
 
 class Prosta:
     def __init__(self, a: float, b: float, c: float):
@@ -27,40 +25,40 @@ class Prosta:
 
     def punk_przecięcia(self, prosta2: Prosta) -> Punkt:
         if self.czy_równoległa(prosta2):
-            raise ValueError("Proste są równoległe")
+            return None
         W = (self.a*prosta2.b)-(prosta2.a*self.b)
         Wx = -(self.c*prosta2.b)+(prosta2.c*self.b)
         Wy = -(self.a*prosta2.c)+(prosta2.a*self.c)
 
         return (Wx/W, Wy/W)
-                
+
 
 class Odcinek:
     def __init__(self, początek: Punkt, koniec: Punkt):
         if początek == koniec:
             raise ValueError("punkty muszą się od siebie różnić")
-        
+
         self.początek = początek
         self.koniec = koniec
 
-        self.x_min = min(początek[0], koniec[0])
-        self.x_max = max(początek[0], koniec[0])
-        self.y_min = min(początek[1], koniec[1])
-        self.y_max = max(początek[1], koniec[1])
-
+    def prosta(self):
         a = self.początek[1] - self.koniec[1]
         b = self.koniec[0] - self.początek[0]
         c = -(a*self.początek[0] + b*self.początek[1])
-        self.prosta = Prosta(a, b, c)
+        return Prosta(a, b, c)
 
     def czy_zawiera_punkt(self, punkt: Punkt):
-        return self.x_min <= punkt[0] <= self.x_max and self.y_min <= punkt[1] <= self.y_max
-    
+        x_min = min(self.początek[0], self.koniec[0])
+        x_max = max(self.początek[0], self.koniec[0])
+        y_min = min(self.początek[1], self.koniec[1])
+        y_max = max(self.początek[1], self.koniec[1])
+        return x_min <= punkt[0] <= x_max and y_min <= punkt[1] <= y_max
+
     def przecina(self, odcinek2: Odcinek) -> bool:
-        if not self.prosta.czy_równoległa(odcinek2.prosta):
-            punkt_przecięcia = self.prosta.punk_przecięcia(odcinek2.prosta)
+        if not self.prosta().czy_równoległa(odcinek2.prosta()):
+            punkt_przecięcia = self.prosta().punk_przecięcia(odcinek2.prosta())
             return self.czy_zawiera_punkt(punkt_przecięcia) and odcinek2.czy_zawiera_punkt(punkt_przecięcia)
-        if self.prosta == odcinek2.prosta:
+        if self.prosta() == odcinek2.prosta():
             return self.czy_zawiera_punkt(odcinek2.początek) or self.czy_zawiera_punkt(odcinek2.koniec)
         else:
             return False
@@ -69,32 +67,26 @@ class Odcinek:
 class Wielokąt:
     def __init__(self, *wierzchołki: Punkt):
         if len(wierzchołki) < 3:
-            raise ValueError(f"Wielokąt musi mieć conajmniej 3 wierzchołki")
+            raise ValueError("Wielokąt musi mieć conajmniej 3 wierzchołki")
         self.wierzchołki = list(wierzchołki)
 
     def czy_zawiera_punkt(self, punkt: Punkt) -> bool:
-        kierunek = 0
         for indeks in range(len(self.wierzchołki)):
             wierzchołek1 = self.wierzchołki[indeks]
             wierzchołek2 = self.wierzchołki[(indeks+1)%len(self.wierzchołki)]
-            wektor1 = (wierzchołek2[0]-wierzchołek1[0], wierzchołek2[1]-wierzchołek1[1])
-            wektor2 = (punkt[0]-wierzchołek2[0], punkt[1]-wierzchołek2[1])
-            iloczyn = iloczyn_wektorowy(wektor1, wektor2)
-            if kierunek == 0:
-                kierunek = iloczyn
-            else:
-                if kierunek * iloczyn < 0:
-                    return False
+            wierzchołek3 = self.wierzchołki[(indeks+2)%len(self.wierzchołki)]
+            prosta = Odcinek(wierzchołek1, wierzchołek2).prosta()
+            a, b, c = prosta.a, prosta.b, prosta.c
+            if (a*wierzchołek3[0] + b*wierzchołek3[1] + c) * (a*punkt[0] + b*punkt[1] + c) < 0:
+                return False
         return True
 
 
 if __name__ == "__main__":
-    # sprawdzanie przecinania się odcinków
     odcinek1 = Odcinek((0, 10), (100, 10))
     odcinek2 = Odcinek((-10, 10), (10, 10))
     print(f"czy odcinki się przecinają: {odcinek1.przecina(odcinek2)}")
 
-    # sprawdzanie przynależności punktu do wielokąta wypukłego
     wielokąt = Wielokąt((10, 10), (100, 10), (100, 100), (10, 100))
     punkt = (50, 50)
     print(f"czy punkt należy do wielokąta: {wielokąt.czy_zawiera_punkt(punkt)}")
