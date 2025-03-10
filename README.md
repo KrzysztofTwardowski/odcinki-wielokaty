@@ -77,28 +77,6 @@ class Odcinek:
             return False
 ```
 
-### Sprawdzanie czy proste są równoległe
-
-```python
-    def czy_równoległa(self, prosta2: Prosta):
-        W = (self.a*prosta2.b)-(prosta2.a*self.b)
-        return W == 0
-```
-
-### Spawdzenie czy proste są równe
-
-```python
-    def __eq__(self, prosta2):
-        if isinstance(prosta2, Prosta):
-            W = (self.a*prosta2.b)-(prosta2.a*self.b)
-            Wx = -(self.c*prosta2.b)+(prosta2.c*self.b)
-            Wy = -(self.a*prosta2.c)+(prosta2.a*self.c)
-            return W == 0 and Wx == 0 and Wy == 0
-        return False
-```
-
-
-
 ## Badanie przynależności punktu do wielokąta wypukłego
 
 ### Zasada działania
