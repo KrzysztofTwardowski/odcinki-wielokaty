@@ -79,7 +79,9 @@ class Odcinek:
 
 ## Badanie przynależności punktu do wielokąta wypukłego
 
-Punkt należy do wielokąta wypukłego, jeśli dla każdej krawędzi wielokąta (zdefiniowanej przez dwa kolejne wierzchołki) badany punkt znajduje się po tej samej stronie krawędzi, co wszystkie pozostałe wierzchołki wielokąta.
+Punkt należy do wielokąta wypukłego, jeśli dla każdej krawędzi wielokąta badany punkt znajduje się po tej samej stronie krawędzi, co wszystkie pozostałe wierzchołki wielokąta.
+
+Oznacza to, że po podstawieniu współrzędnych badanego punktu oraz dowolnego innego wierzchołka do równania prostej wyznaczonej przez końce danej krawędzi, wyniki obliczeń powinny mieć ten sam znak.
 
 ```python
 class Wielokąt:
