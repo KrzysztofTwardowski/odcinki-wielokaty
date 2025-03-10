@@ -101,3 +101,8 @@ class Wielokąt:
                 return False
         return True
 ```
+
+## Zadania
+
+1. Sprawdź, czy punkt (680, 389) należy do czworokąta o wierzchołkach (487, 396), (517, 234), (999, 241), (859, 572)
+2. Sprawdź, czy odcinek o końcach (145, 345) (224, 50) przecina odcinek o końcach (200, 48) (168, 383)
