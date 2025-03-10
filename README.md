@@ -79,11 +79,7 @@ class Odcinek:
 
 ## Badanie przynależności punktu do wielokąta wypukłego
 
-### Zasada działania
-
-Funkcja `czy_zawiera_punkt` sprawdza, czy punkt znajduje się wewnątrz wielokąta wypukłego. Dla każdego boku wielokąta obliczany jest iloczyn wektorowy, który pozwala określić, po której stronie boku znajduje się punkt. Jeżeli dla każdego boku wynik iloczynu wektorowego ma ten sam znak, punkt znajduje się wewnątrz wielokąta.
-
-### Implementacja w pythonie
+Punkt należy do wielokąta wypukłego, jeśli dla każdej krawędzi wielokąta (zdefiniowanej przez dwa kolejne wierzchołki) badany punkt znajduje się po tej samej stronie krawędzi, co wszystkie pozostałe wierzchołki wielokąta.
 
 ```python
 class Wielokąt:
