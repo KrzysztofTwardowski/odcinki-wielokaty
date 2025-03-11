@@ -63,9 +63,7 @@ class Odcinek:
     def czy_zawiera_punkt(self, punkt: Punkt):
         x_min = min(self.początek[0], self.koniec[0])
         x_max = max(self.początek[0], self.koniec[0])
-        # y_min = min(self.początek[1], self.koniec[1])
-        # y_max = max(self.początek[1], self.koniec[1])
-        return x_min <= punkt[0] <= x_max # and y_min <= punkt[1] <= y_max
+        return x_min <= punkt[0] <= x_max
 
     def przecina(self, odcinek2: Odcinek) -> bool:
         if not self.prosta().czy_równoległa(odcinek2.prosta()):
