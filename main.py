@@ -50,9 +50,9 @@ class Odcinek:
     def czy_zawiera_punkt(self, punkt: Punkt):
         x_min = min(self.początek[0], self.koniec[0])
         x_max = max(self.początek[0], self.koniec[0])
-        y_min = min(self.początek[1], self.koniec[1])
-        y_max = max(self.początek[1], self.koniec[1])
-        return x_min <= punkt[0] <= x_max and y_min <= punkt[1] <= y_max
+        # y_min = min(self.początek[1], self.koniec[1])
+        # y_max = max(self.początek[1], self.koniec[1])
+        return x_min <= punkt[0] <= x_max # and y_min <= punkt[1] <= y_max
 
     def przecina(self, odcinek2: Odcinek) -> bool:
         if not self.prosta().czy_równoległa(odcinek2.prosta()):
@@ -80,13 +80,3 @@ class Wielokąt:
             if (a*wierzchołek3[0] + b*wierzchołek3[1] + c) * (a*punkt[0] + b*punkt[1] + c) < 0:
                 return False
         return True
-
-
-if __name__ == "__main__":
-    odcinek1 = Odcinek((0, 10), (100, 10))
-    odcinek2 = Odcinek((-10, 10), (10, 10))
-    print(f"czy odcinki się przecinają: {odcinek1.przecina(odcinek2)}")
-
-    wielokąt = Wielokąt((10, 10), (100, 10), (100, 100), (10, 100))
-    punkt = (50, 50)
-    print(f"czy punkt należy do wielokąta: {wielokąt.czy_zawiera_punkt(punkt)}")
