@@ -72,8 +72,10 @@ class Wielokąt:
         for indeks in range(len(self.wierzchołki)):
             wierzchołek1 = self.wierzchołki[indeks]
             wierzchołek2 = self.wierzchołki[(indeks+1)%len(self.wierzchołki)]
-            wierzchołek3 = self.wierzchołki[(indeks+2)%len(self.wierzchołki)]
             prosta = Odcinek(wierzchołek1, wierzchołek2).prosta()
+
+            wierzchołek3 = self.wierzchołki[(indeks+2)%len(self.wierzchołki)]
+
             a, b, c = prosta.a, prosta.b, prosta.c
             if (a*wierzchołek3[0] + b*wierzchołek3[1] + c) * (a*punkt[0] + b*punkt[1] + c) < 0:
                 return False
